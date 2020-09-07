@@ -1,0 +1,179 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: registry
+  namespace: registry
+  labels:
+    app: registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry
+  template:
+    metadata:
+      labels:
+        app: registry
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: docker-v2
+        image: registry:2.7.1@sha256:a54bc9be148764891c44676ce8c44f1e53514c43b1bfbab87b896f4b9f0b5d99
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 200Mi
+        ports:
+        - containerPort: 80
+          name: registry
+          protocol: TCP
+        env:
+        - name: REGISTRY_HTTP_SECRET
+          value: TODO_GET_FROM_SECRET
+        - name: REGISTRY_HTTP_ADDR
+          value: 0.0.0.0:80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+        volumeMounts:
+        - name: etc-registry
+          mountPath: /etc/docker/registry
+        - name: storage-temporary
+          mountPath: /var/lib/registry
+      volumes:
+      - name: etc-registry
+        configMap:
+          name: registry-config
+      - name: storage-temporary
+        emptyDir: {}
+---
+kind: ConfigMap
+metadata:
+  name: registry-config
+  namespace: registry
+apiVersion: v1
+data:
+  config.yml: |-
+    version: 0.1
+    log:
+      fields:
+        service: registry
+    storage:
+      cache:
+        blobdescriptor: inmemory
+      filesystem:
+        rootdirectory: /var/lib/registry
+    http:
+      headers:
+        X-Content-Type-Options: [nosniff]
+    health:
+      storagedriver:
+        enabled: true
+        interval: 10s
+        threshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: builds
+  namespace: registry
+  labels:
+    authenticated: "false"
+spec:
+  selector:
+    app: registry
+  ports:
+  - name: http
+    port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kanikocache
+  namespace: registry
+  labels:
+    authenticated: "false"
+spec:
+  selector:
+    app: registry
+  ports:
+  - name: http
+    port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knative
+  namespace: registry
+  labels:
+    authenticated: "false"
+spec:
+  selector:
+    app: registry
+  ports:
+  - name: http
+    port: 80
+---
+# Set up a daemonset that attepts to edit `/etc/hosts` on current and future nodes.
+# The init container adds the `knative.registry.svc.cluster.local` hostname
+# if it's not already present, pointing to the IP of the knative service.
+# There might be node types for which this edit isn't allowed or doesn't work.
+# To see status use
+# `kubectl -n kube-system logs -l app=registry-etc-hosts-update -c update`
+# which should print out a `getent hosts` command for first time runs and the IP given by
+# `kubectl -n registry get service knative -o jsonpath='{.spec.clusterIP}'`
+# on subsequent runs.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: registry-etc-hosts-update
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: registry-etc-hosts-update
+  template:
+    metadata:
+      labels:
+        app: registry-etc-hosts-update
+    spec:
+      initContainers:
+      - name: update
+        image: debian:stretch-slim
+        volumeMounts:
+        - name: etchosts
+          mountPath: /host-etc/hosts
+          readOnly: false
+        env:
+        - name: REGISTRY_SERVICE_HOSTS
+          value: >-
+            knative.registry.svc.cluster.local
+            builds.registry.svc.cluster.local
+            kanikocache.registry.svc.cluster.local
+        command:
+        - bash
+        - -ce
+        - |
+          NL=$'\n'
+          HOSTS="$(cat /host-etc/hosts)"
+          for H in $REGISTRY_SERVICE_HOSTS; do
+            ent=$(getent hosts $H);
+            [ -z "$ent" ] && echo "Failed to get hosts entry for $H" && exit 1;
+            echo "$HOSTS" | grep " $H"  || HOSTS="$HOSTS$NL$ent";
+            echo "$HOSTS" | grep "$ent" || HOSTS=$(echo "$HOSTS" | sed "s|.* $H|$ent|");
+          done;
+          echo "$HOSTS" | diff -u /host-etc/hosts - || echo "$HOSTS" > /host-etc/hosts
+          echo "Done."
+      containers:
+      - name: init-container-did-the-work
+        image: gcr.io/google_containers/pause-amd64:3.1@sha256:59eec8837a4d942cc19a52b8c09ea75121acc38114a2c68b98983ce9356b8610
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: etchosts
+        hostPath:
+          path: /etc/hosts
