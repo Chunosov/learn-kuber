@@ -9,6 +9,7 @@
 - [minikube_knative_helloworld_py](./minikube_knative_helloworld_py/README.md)
 - [minikube_local_registry](./minikube_local_registry/README.md)
 - [minikube_knative_simple](./minikube_knative_simple/README.md)
+- [minikube_knative_grpc](./minikube_knative_grpc/README.md)
 
 ## minikube
 
