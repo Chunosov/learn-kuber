@@ -6,6 +6,7 @@
 - [Run simple service in minikube cluster from a local docker image](./minikube_local_image/README.md) (minikube)
 - [Run service with persistent volumes in minikube cluster](./minikube_shared_dirs/README.md) (minikube)
 - [Setup local docker registry with minikube](./minikube_local_registry/README.md) (minikube)
+- [Run example echo server behind kong-proxy on minikube](./minikube_kong_echo/README.md) (minikube, kong)
 - [Run predefined helloworld with autoscale via knative in minikube](./minikube_knative_helloworld/README.md) (minikube, knative, kong)
 - [Helloworld application in python using knative on minikube](./minikube_knative_helloworld_py/README.md) (minikube, knative, kong)
 - [Run simple service from local image via knative in minikube](./minikube_knative_simple/README.md) (minikube, knative, kong)

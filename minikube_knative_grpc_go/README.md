@@ -112,7 +112,7 @@ grpcurl -plaintext -proto ./proto/ping.proto \
 Failed to dial target host "192.168.99.107:32188": context deadline exceeded
 ```
 
-<span style="color:red"><b>Doesn't work.</b> Seems kong refuses to proxy grpc requests at all. No pods are run. Deployment is not kicked - `kubectl describe deployment` shows events "Scaled up replica ... to 1" then "Scaled down replica ... to 0", and these events relate to the revious curl run.</span>
+<span style="color:red"><b>Doesn't work.</b> Seems kong refuses to proxy grpc requests at all. No pods are run. Deployment is not kicked - `kubectl describe deployment` shows events "Scaled up replica ... to 1" then "Scaled down replica ... to 0", and these events relate to the previous curl run.</span>
 
 <span style="color:red">Probably some additional kong configuration is required.</span>
 
@@ -140,4 +140,4 @@ aa810f01497fc601617cde8aa0d8ec89a4aebfe12440a41b421e6a395c534510/diff/client /tm
 /tmp/client -server_addr=$PROXY_ADDR -insecure -server_host_override=grpc-ping.default.svc.cluster.local
 ```
 
-**TODO**: <span style="color:red"><b>Doesn't work.</b> Tried different address-port combinations that can be obtained from `kubectl describe service kong-proxy -n kong`. Most of them get "Connection refused". Seems one of them got "context deadline exceeded" so it was correct combination. Don't remembed what of them it was, repeat the experiment.</red>
+<span style="color:red"><b>Doesn't work.</b> Tried different address-port combinations that can be obtained from `kubectl describe service kong-proxy -n kong`. Most of them get "Connection refused". Seems one of them got "context deadline exceeded" so it was the correct combination. Don't remembed what of them it was, repeat the experiment.</red>
