@@ -35,7 +35,7 @@ Server: kong/2.1.3
 Deploy sample echo servce:
 
 ```bash
-kubectl apply -f echo.yaml
+kubectl apply -f service.yaml
 # or
 kubectl apply -f https://bit.ly/echo-service
 

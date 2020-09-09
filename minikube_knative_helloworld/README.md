@@ -1,5 +1,7 @@
 # Run predefined helloworld with autoscale via knative in minikube
 
+https://knative.dev/v0.15-docs/serving/samples/hello-world/helloworld-go/
+
 Start demo cluster:
 
 ```bash
