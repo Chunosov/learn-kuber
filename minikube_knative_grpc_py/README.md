@@ -1,4 +1,4 @@
-# Example of gRPC service with minikube and knative
+# Example of gRPC service on Python with minikube and knative
 
 Service is a simple greeter taken from official [gRPC examples](https://github.com/grpc/grpc/tree/master/examples/python/helloworld).
 
@@ -52,7 +52,7 @@ kubectl delete -f service_plain.yaml
 ```bash
 eval $(minikube -p minikube docker-env)
 docker build -t dev.local/grpc_greeter:v0 .
-# Tags resolution should be disabled for dev.local
+# Tags resolution should be disabled for dev.local, see ../README.md
 kubectl apply -f service_knative.yaml
 
 kubectl get service
@@ -67,10 +67,10 @@ NAME                      TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S) 
 kong-proxy                LoadBalancer   10.98.127.254    <pending>     80:32188/TCP,443:32637/TCP   4d1h
 ```
 
-## Test with python client (not working)
+## Test with python client
 
 ```bash
 python greeter_client_knative.py $(minikube ip):32188
 ```
 
-The python GRPC API is not working because it can't provide additional headers to GRPC call. Additional "Host" header is required to allow kong-proxy resolving to what service it should requrect a request. There is also something called ":authority" pseudoheader (whatever it means) in HTTP/2 seemingly allowing the same behaviour. Python guys seem not very interesting in fixing this issues as there were two PRs in python grpc repo providing [authority](https://github.com/grpc/grpc/pull/14077) and [host](https://github.com/grpc/grpc/pull/14361) params, but both of them were closed without merging.
+<span style="color:red"><b>Doesn't work.</b> Python gRPC API is not working through proxy because we can't provide additional headers to gRPC call. Additional "Host" header is required to allow kong-proxy resolving to what service it should requrect a request. There is also something called `:authority` pseudoheader (whatever it means) in HTTP/2 seemingly allowing the same behaviour. Python guys seem not very interesting in fixing this issues as there were two PRs in python gRPC repo providing [authority](https://github.com/grpc/grpc/pull/14077) and [host](https://github.com/grpc/grpc/pull/14361) params, but both of them were closed without merging.</span>

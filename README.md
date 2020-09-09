@@ -2,14 +2,15 @@
 
 ## Sequence of samples
 
-- [minikube_helloworld](./minikube_helloworld/README.md)
-- [minikube_local_image](./minikube_local_image/README.md)
-- [minikube_shared_dirs](./minikube_shared_dirs/README.md)
-- [minikube_knative_helloworld](./minikube_knative_helloworld/README.md)
-- [minikube_knative_helloworld_py](./minikube_knative_helloworld_py/README.md)
-- [minikube_local_registry](./minikube_local_registry/README.md)
-- [minikube_knative_simple](./minikube_knative_simple/README.md)
-- [minikube_knative_grpc](./minikube_knative_grpc/README.md)
+- [Run helloworld service in minikube cluster via CLI](./minikube_helloworld/README.md) (minikube)
+- [Run simple service in minikube cluster from a local docker image](./minikube_local_image/README.md) (minikube)
+- [Run service with persistent volumes in minikube cluster](./minikube_shared_dirs/README.md) (minikube)
+- [Setup local docker registry with minikube](./minikube_local_registry/README.md) (minikube)
+- [Run predefined helloworld with autoscale via knative in minikube](./minikube_knative_helloworld/README.md) (minikube, knative, kong)
+- [Helloworld application in python using knative on minikube](./minikube_knative_helloworld_py/README.md) (minikube, knative, kong)
+- [Run simple service from local image via knative in minikube](./minikube_knative_simple/README.md) (minikube, knative, kong)
+- [Example of gRPC ping app on Go with minikube and knative](./minikube_grpc_go/README/md) (minikube, knative, kong)
+- [Example of gRPC service on Python with minikube and knative](./minikube_knative_grpc_py/README.md) (minikube, knative, kong)
 
 ## minikube
 
@@ -126,3 +127,22 @@ kubectl patch configmap/config-network --namespace knative-serving --type merge 
 ```
 
 See also [Kong official guides on Ingress Controller](https://github.com/Kong/kubernetes-ingress-controller/tree/main/docs/guides) and [Using Kong with Knative](https://github.com/Kong/kubernetes-ingress-controller/blob/main/docs/guides/using-kong-with-knative.md) in particular.
+
+### Disable tag resolution for local images
+
+knative will not try to pull images if they are in `dev.local` domain. Be sure that [tag resolution](https://knative.dev/docs/serving/tag-resolution/) should be disabled for `dev.local`:
+
+```bash
+KUBE_EDITOR="nano" kubectl -n knative-serving edit configmap config-deployment
+```
+
+Then copy the `registriesSkippingTagResolving` line from the `_example` section to its parent `data` section. It should look similar to:
+
+```yaml
+apiVersion: v1
+data:
+  # lot of stuff here
+  registriesSkippingTagResolving: dev.local,ko.local
+kind: ConfigMap
+  # other stuff here
+```
