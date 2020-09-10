@@ -1,6 +1,6 @@
 # kubernetes lessons and samples
 
-## Sequence of samples
+## Sequence of samples (minikube)
 
 - [Run helloworld service in minikube cluster via CLI](./minikube_helloworld/README.md) (minikube)
 - [Run simple service in minikube cluster from a local docker image](./minikube_local_image/README.md) (minikube)
@@ -16,24 +16,38 @@
 - [Example of gRPC ping app on Go with minikube and knative](./minikube_knative_grpc_go/README.md) (minikube, knative, kong)
 - [Example of gRPC service on Python with minikube and knative](./minikube_knative_grpc_py/README.md) (minikube, knative, kong)
 
-## minikube
+## Sequence of samples (kind)
 
-Install kubectl binary:
+- [Start demo cluster with kind](./kind_empty_cluster) (kind)
+
+## Tools
+
+### kubectl
+
+Install [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/) binary:
 
 ```bash
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
-kubectl version --client
+
+kubectl version
+Client Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.1", GitCommit:"206bcadf021e76c27513500ca24182692aabd17e", GitTreeState:"clean", BuildDate:"2020-09-09T11:26:42Z", GoVersion:"go1.15", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.0", GitCommit:"e19964183377d0ec2052d1f1fa930c4d7575bd50", GitTreeState:"clean", BuildDate:"2020-08-26T14:23:04Z", GoVersion:"go1.15", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-Install [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) binary:
+### minikube
+
+Install [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) binary for trying minikube examples:
 
 ```bash
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 chmod +x minikube
 sudo mv minikube /usr/local/bin
+
 minikube version
+minikube version: v1.13.0
+commit: 0c5e9de4ca6f9c55147ae7f90af97eff5befef5f-dirty
 ```
 
 Install [kvm](https://help.ubuntu.com/community/KVM/Installation) [driver](https://minikube.sigs.k8s.io/docs/drivers/kvm2/) for minikube.
@@ -65,7 +79,7 @@ kubeconfig: Configured
 
 You can connect to the running VM via `minikube ssh`. Or open VM in Virtual Machine Manager application, double-click VM to open a terminal and login as root without password.
 
-### Shared dirs
+#### Shared dirs
 
 With `kvm2` driver you can't use shared directories. If they needed, use VirualBox driver, it automatically bind host's `/home` directory to `/hosthome` directory inside of VM (but it is [not configurable](https://kubernetes.io/docs/setup/learning-environment/minikube/#mounted-host-folders) currently).
 
@@ -85,7 +99,7 @@ minikube profile list
 |----------|------------|---------|----------------|------|---------|---------|
 ```
 
-## knative
+### knative
 
 Install [knative](https://knative.dev/docs/install/any-kubernetes-cluster/) custom resource definitions (CRDs) and serving component:
 
@@ -132,7 +146,7 @@ kubectl patch configmap/config-network --namespace knative-serving --type merge 
 
 See also [Kong official guides on Ingress Controller](https://github.com/Kong/kubernetes-ingress-controller/tree/main/docs/guides) and [Using Kong with Knative](https://github.com/Kong/kubernetes-ingress-controller/blob/main/docs/guides/using-kong-with-knative.md) in particular.
 
-### Disable tag resolution for local images
+#### Disable tag resolution for local images
 
 knative will not try to pull images if they are in `dev.local` domain. Be sure that [tag resolution](https://knative.dev/docs/serving/tag-resolution/) should be disabled for `dev.local`:
 
@@ -151,14 +165,30 @@ kind: ConfigMap
   # other stuff here
 ```
 
-## grpcurl
+### grpcurl
 
 We use [grpcurl](https://github.com/fullstorydev/grpcurl) for testing gRPC services.
 
 ```bash
 curl -LO https://github.com/fullstorydev/grpcurl/releases/download/v1.7.0/grpcurl_1.7.0_linux_x86_64.tar.gz
 tar -zxvf grpcurl_1.7.0_linux_x86_64.tar.gz -C .
+chmod +x ./grpcurl
 sudo mv grpcurl /usr/local/bin
-sudo chmod +x /usr/local/bin/grpcurl
 rm grpcurl_1.7.0_linux_x86_64.tar.gz
+
+grpcurl -version
+grpcurl v1.7.0
+```
+
+### kind
+
+Install [kind](https://kind.sigs.k8s.io/) binary for trying kind examples.
+
+```bash
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
+chmod +x kind
+sudo mv kind /usr/local/bin
+
+kind version
+kind v0.8.1 go1.14.2 linux/amd64
 ```
