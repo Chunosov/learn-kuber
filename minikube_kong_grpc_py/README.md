@@ -1,7 +1,5 @@
 # Run simple Python gRPC service behind kong-proxy on minikube
 
-## Start cluster
-
 Run minikube cluster and [install kong](https://github.com/Kong/kubernetes-ingress-controller/blob/master/docs/deployment/minikube.md):
 
 ```bash

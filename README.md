@@ -9,6 +9,7 @@
 - [Run example echo server behind kong-proxy on minikube](./minikube_kong_echo/README.md) (minikube, kong)
 - [Run example gRPC service behind kong-proxy on minikube](./minikube_kong_grpc/README.md) (minikube, kong)
 - [Run simple Python gRPC service behind kong-proxy on minikube](./minikube_kong_grpc_py/README.md) (minikube, kong)
+- [Run simple Go gRPC service behind kong-proxy on minikube](./minikube_kong_grpc_go/README.md) (minikube, kong)
 - [Run predefined helloworld with autoscale via knative in minikube](./minikube_knative_helloworld/README.md) (minikube, knative, kong)
 - [Helloworld application in python using knative on minikube](./minikube_knative_helloworld_py/README.md) (minikube, knative, kong)
 - [Run simple service from local image via knative in minikube](./minikube_knative_simple/README.md) (minikube, knative, kong)
@@ -148,4 +149,16 @@ data:
   registriesSkippingTagResolving: dev.local,ko.local
 kind: ConfigMap
   # other stuff here
+```
+
+## grpcurl
+
+We use [grpcurl](https://github.com/fullstorydev/grpcurl) for testing gRPC services.
+
+```bash
+curl -LO https://github.com/fullstorydev/grpcurl/releases/download/v1.7.0/grpcurl_1.7.0_linux_x86_64.tar.gz
+tar -zxvf grpcurl_1.7.0_linux_x86_64.tar.gz -C .
+sudo mv grpcurl /usr/local/bin
+sudo chmod +x /usr/local/bin/grpcurl
+rm grpcurl_1.7.0_linux_x86_64.tar.gz
 ```

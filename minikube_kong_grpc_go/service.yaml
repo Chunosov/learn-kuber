@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-sia
+  labels:
+    app: grpc-sia
+spec:
+  type: NodePort
+  ports:
+  - name: grpc
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: grpc-sia
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-sia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-sia
+  template:
+    metadata:
+      labels:
+        app: grpc-sia
+    spec:
+      containers:
+      - image: grpc_sia:v0
+        name: grpc-sia
+        ports:
+        - containerPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo-grpc-go
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grpc-sia
+          servicePort: 8080
