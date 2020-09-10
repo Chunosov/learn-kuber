@@ -55,7 +55,7 @@ grpc-sia   NodePort   10.108.21.143   <none>        8080:30625/TCP   12s
 
 ## Test as plain kubernetes service
 
-Make shure yout have grpcurl [installed](../README.md). Call the service from outside of the cluster:
+Make shure yout have grpcurl [installed](../README.md#grpcurl). Call the service from outside of the cluster:
 
 ```bash
 curl -d "test" $(minikube ip):30625
@@ -137,4 +137,20 @@ curl -d "TEST" $PROXY_ADDR
 ```bash
 grpcurl -plaintext -proto doer/doer.proto -format json -d '{"thing":"SOMETHING"}' $PROXY_ADDR doer.Doer/DoIt
 Failed to dial target host "192.168.39.161:30312": context deadline exceeded
+```
+
+### Try to use KongIngess with service
+
+```bash
+echo "
+apiVersion: configuration.konghq.com/v1
+kind: KongIngress
+metadata:
+  name: grpc-upstream
+proxy:
+  protocol: grpc
+" | kubectl apply -f -
+
+kubectl patch service grpc-sia -p '{"metadata":{"annotations":{"configuration.konghq.com":"grpc-upstream"}}}'
+kubectl patch ingress demo-grpc-go -p '{"metadata":{"annotations":{"configuration.konghq.com":"grpc-upstream"}}}'
 ```

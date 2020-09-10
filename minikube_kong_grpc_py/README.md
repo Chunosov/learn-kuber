@@ -67,9 +67,7 @@ curl $PROXY_ADDR
 
 So we have a route, the route is of gRPC type.
 
-Download [grpcurl](https://github.com/fullstorydev/grpcurl/releases), move it to `/usr/local/bin`, and make executable.
-
-Test with grpcurl:
+Test with grpcurl (make sure you have it [installed](../README.md#grpcurl)):
 
 ```bash
 grpcurl -v -plaintext -d '{"name":"TEST"}' $PROXY_ADDR helloworld.Greeter/SayHello

@@ -58,7 +58,7 @@ docker tag dev.local/grpc-ping-go dev.local/grpc-ping-go:v0
 
 ### Deploy service
 
-Deploy the service and get proxy port (be sure that tag resolution is [disabled](../README.md) for `dev.local`):
+Deploy the service and get proxy port (be sure that tag resolution is [disabled](../README.md#Disable-tag-resolution-for-local-images) for `dev.local`):
 
 ```bash
 kubectl apply -f service_knative.yaml
@@ -97,9 +97,7 @@ curl doesn't understand grpc answer, but we can see that grpc service was starte
 
 #### Use grpcurl
 
-Download [grpcurl](https://github.com/fullstorydev/grpcurl/releases), move it to `/usr/local/bin`, and make executable.
-
-Try to call the service:
+Make sure you have grpcurl [installed](../README.md#grpcurl). Try to call the service:
 
 ```bash
 grpcurl -plaintext -proto ./proto/ping.proto \

@@ -65,7 +65,7 @@ Client sent an HTTP request to an HTTPS server.
 
 ### Use grpcurl
 
-Download [grpcurl](https://github.com/fullstorydev/grpcurl/releases), move it to `/usr/local/bin`, and make executable.
+Make sure you have grpcurl [installed](../README.md#grpcurl).
 
 ```bash
 grpcurl -v -d '{"greeting": "TEST"}' -plaintext $(minikube ip):30552 hello.HelloService.SayHello
