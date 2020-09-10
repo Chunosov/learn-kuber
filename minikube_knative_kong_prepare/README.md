@@ -1,5 +1,7 @@
 # Prepare knative and kong on minikube
 
+## knative
+
 Install [knative](https://knative.dev/docs/install/any-kubernetes-cluster/) custom resource definitions (CRDs) and serving component:
 
 ```bash
@@ -17,6 +19,8 @@ autoscaler          ClusterIP   10.96.107.228    <none>        9090/TCP,8008/TCP
 controller          ClusterIP   10.101.63.37     <none>        9090/TCP,8008/TCP                 36s
 webhook             ClusterIP   10.103.137.140   <none>        9090/TCP,8008/TCP,443/TCP         36s
 ```
+
+## Ingress controller
 
 knative requires something called "network layer", we'll use [kong](https://docs.konghq.com/2.1.x/kong-for-kubernetes/using-kong-for-kubernetes/) for that:
 
@@ -45,7 +49,27 @@ kubectl patch configmap/config-network --namespace knative-serving --type merge 
 
 See also [Kong official guides on Ingress Controller](https://github.com/Kong/kubernetes-ingress-controller/tree/main/docs/guides) and [Using Kong with Knative](https://github.com/Kong/kubernetes-ingress-controller/blob/main/docs/guides/using-kong-with-knative.md) in particular.
 
-#### Disable tag resolution for local images
+## Proxy overview
+
+There is one kong-proxy but can be many services behind. Proxy uses routes to select a service. Header `Host: your-service-name.default.example.com` helps to choose a desired service. Without it, proxy doesn't know to where it should forward. For example:
+
+```bash
+curl -i $(minikube ip):32131
+> no Route matched with those values
+```
+
+In real life, DNS should be configured to resolve something like `default.example.com` into kong-proxy ip address. But in dev env we don't have DNS and call kong-proxy by ip-address explicitly, and substitude headers in curl manually. For example:
+
+```bash
+curl -i -H "Host: your-service-name.default.example.com" $(minikube ip):32131
+# some answer from the service
+```
+
+![](knative-kong.png)
+
+See also this official diagram of [Kong Ingress Controller Design](https://github.com/Kong/kubernetes-ingress-controller/blob/main/docs/concepts/design.md).
+
+## Disable tag resolution for local images
 
 knative will not try to pull images if they are in `dev.local` domain. Be sure that [tag resolution](https://knative.dev/docs/serving/tag-resolution/) should be disabled for `dev.local`:
 

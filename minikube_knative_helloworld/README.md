@@ -1,7 +1,5 @@
 # Run predefined helloworld with autoscale via knative in minikube
 
-https://knative.dev/v0.15-docs/serving/samples/hello-world/helloworld-go/
-
 Start demo cluster:
 
 ```bash
@@ -25,10 +23,12 @@ spec:
       containers:
         - image: gcr.io/knative-samples/helloworld-go
           env:
-            - name: TARGET # The environment variable printed out by the sample app
+            - name: TARGET
               value: Go Sample v1
 " | kubectl apply -f -
 ```
+
+`TARGET` is the environment variable printed out by the sample app. There is a [doc](https://knative.dev/v0.15-docs/serving/samples/hello-world/helloworld-go/) about how this image built.
 
 Here is what we have now:
 
@@ -65,6 +65,8 @@ X-Kong-Upstream-Latency: 1752
 Hello Go Sample v1!
 ```
 
+We have to pass the Host header explicitly to help kong-proxy resolve a route to our service. In real life DNS does this job (see [this diagram](../minikube_knative_kong_prepare/README.md#Proxy-overview)).
+
 It show a big latency because service pod gets running:
 
 ```bash
@@ -99,18 +101,3 @@ No resources found in default namespace.
 ```
 
 So it works.
-
----
-
-There is one proxy and can be many services behind. Proxy use routes to select a service. Header `Host: helloworld-go.default.example.com` helps to choose a desired service. Without it, proxy doesn't know to where it should forward:
-
-```bash
-curl -i $(minikube ip):32526
-> no Route matched with those values
-```
-
-In real life, DNS should be configured to resolve something like "default.example.com" into kong-proxy ip address. But in dev env we don't have DNS and call kong-proxy by ip explicitly, and substitude headers in curl manually.
-
-![](knative-kong.png)
-
-See also this official diagram of [Kong Ingress Controller Design](https://github.com/Kong/kubernetes-ingress-controller/blob/main/docs/concepts/design.md).
