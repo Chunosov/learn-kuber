@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-greeter
+  labels:
+    app: grpc-greeter
+spec:
+  ports:
+  - name: grpc
+    port: 50051
+    targetPort: 50051
+  selector:
+    app: grpc-greeter
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-greeter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-greeter
+  template:
+    metadata:
+      labels:
+        app: grpc-greeter
+    spec:
+      containers:
+      - image: grpc_greeter:v0
+        name: grpc-greeter
+        ports:
+        - containerPort: 50051
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo-grpc-py
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grpc-greeter
+          servicePort: 50051
