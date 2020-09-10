@@ -58,7 +58,7 @@ docker tag dev.local/grpc-ping-go dev.local/grpc-ping-go:v0
 
 ### Deploy service
 
-Deploy the service and get proxy port (be sure that tag resolution is [disabled](../README.md#Disable-tag-resolution-for-local-images) for `dev.local`):
+Deploy the service and get proxy port (be sure that tag resolution is [disabled](../minikube_knative_kong_prepare/README.md#Disable-tag-resolution-for-local-images) for `dev.local`):
 
 ```bash
 kubectl apply -f service_knative.yaml

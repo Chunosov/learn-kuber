@@ -8,7 +8,7 @@ Start demo cluster:
 minikube start --driver=virtualbox
 ```
 
-Install knative and kong as described [here](../README.md).
+Install knative and kong as described [here](../minikube_knative_kong_prepare/README.md).
 
 Install predefined helloworld as knative service:
 
