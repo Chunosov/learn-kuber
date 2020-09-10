@@ -11,7 +11,7 @@
 - [Run example gRPC service behind kong-proxy on minikube](./minikube_kong_grpc/README.md) (minikube, kong)
 - [Run simple Python gRPC service behind kong-proxy on minikube](./minikube_kong_grpc_py/README.md) (minikube, kong)
 - [Run simple Go gRPC service behind kong-proxy on minikube](./minikube_kong_grpc_go/README.md) (minikube, kong, kong)
-- [Prepare knative and kong on minikube](../minikube_knative_kong_prepare) (minikube, knative)
+- [Prepare knative and kong on minikube](./minikube_knative_kong_prepare/README.md) (minikube, knative)
 - [Run predefined helloworld with autoscale via knative in minikube](./minikube_knative_helloworld/README.md) (minikube, knative, kong)
 - [Helloworld application in python using knative on minikube](./minikube_knative_helloworld_py/README.md) (minikube, knative, kong)
 - [Run simple service from local image via knative in minikube](./minikube_knative_simple/README.md) (minikube, knative, kong)
