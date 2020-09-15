@@ -19,6 +19,7 @@
 - [Run simple service from local image via knative in minikube](./minikube_knative_simple/README.md) (minikube, knative, kong)
 - 💀 [Example of gRPC ping app on Go with minikube and knative](./minikube_knative_grpc_go/README.md) (minikube, knative, kong)
 - 💀 [Example of gRPC service on Python with minikube and knative](./minikube_knative_grpc_py/README.md) (minikube, knative, kong)
+- [Run simple service with nginx ingress controller on minikube](./minikube_nginx_ingress/README.md) (minikube, nginx)
 
 ## Sequence of samples (kind)
 

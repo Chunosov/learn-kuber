@@ -1,0 +1,76 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: orange-app
+  labels:
+    app: orange
+spec:
+  containers:
+    - name: orange-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=orange"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: orange-service
+spec:
+  selector:
+    app: orange
+  ports:
+    - port: 5678 # Default port for image
+      name: default-port
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: lemon-app
+  labels:
+    app: lemon
+spec:
+  containers:
+    - name: lemon-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=lemon"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: lemon-service
+spec:
+  selector:
+    app: lemon
+  ports:
+    - port: 5678 # Default port for image
+      name: default-port
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress-1
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: orange.fruits.org
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: orange-service
+              port:
+                name: default-port
+  - host: lemon.fruits.org
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: lemon-service
+              port:
+                name: default-port
