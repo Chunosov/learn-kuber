@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grpcbin
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPCS"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grpcbin
+            port:
+              name: secure

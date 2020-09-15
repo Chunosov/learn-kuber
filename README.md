@@ -1,33 +1,36 @@
 # kubernetes lessons and samples
 
+## Sequence of samples
+
 💀 - not working
 
-## Sequence of samples (minikube)
+### minikube cluster
 
-- [Start demo cluster with minikube](./minikube_empty_cluster/README.md) (minikube)
-- [Run helloworld service in minikube cluster via CLI](./minikube_helloworld/README.md) (minikube)
-- [Run simple service in minikube cluster from a local docker image](./minikube_local_image/README.md) (minikube)
-- [Run service with persistent volumes in minikube cluster](./minikube_shared_dirs/README.md) (minikube)
-- [Setup local docker registry with minikube](./minikube_local_registry/README.md) (minikube)
-- [Run example echo server behind kong-proxy on minikube](./minikube_kong_echo/README.md) (minikube, kong)
-- 💀 [Run example gRPC service behind kong-proxy on minikube](./minikube_kong_grpc/README.md) (minikube, kong)
-- 💀 [Run simple Python gRPC service behind kong-proxy on minikube](./minikube_kong_grpc_py/README.md) (minikube, kong)
-- 💀 [Run simple Go gRPC service behind kong-proxy on minikube](./minikube_kong_grpc_go/README.md) (minikube, kong, kong)
-- [Prepare knative and kong on minikube](./minikube_knative_kong_prepare/README.md) (minikube, knative)
-- [Run predefined helloworld with autoscale via knative in minikube](./minikube_knative_helloworld/README.md) (minikube, knative, kong)
-- [Helloworld application in python using knative on minikube](./minikube_knative_helloworld_py/README.md) (minikube, knative, kong)
-- [Run simple service from local image via knative in minikube](./minikube_knative_simple/README.md) (minikube, knative, kong)
-- 💀 [Example of gRPC ping app on Go with minikube and knative](./minikube_knative_grpc_go/README.md) (minikube, knative, kong)
-- 💀 [Example of gRPC service on Python with minikube and knative](./minikube_knative_grpc_py/README.md) (minikube, knative, kong)
-- [Run simple service with nginx ingress controller on minikube](./minikube_nginx_ingress/README.md) (minikube, nginx)
+- [Start demo cluster](./minikube_empty_cluster/README.md) (minikube)
+- [Run helloworld service via CLI](./minikube_helloworld/README.md) (minikube)
+- [Run simple service from a local docker image](./minikube_local_image/README.md) (minikube)
+- [Run service with persistent volumes](./minikube_shared_dirs/README.md) (minikube)
+- [Setup local docker registry](./minikube_local_registry/README.md) (minikube)
+- [Run example echo server behind kong-proxy](./minikube_kong_echo/README.md) (minikube, kong)
+- 💀 [Run example gRPC service behind kong-proxy](./minikube_kong_grpc/README.md) (minikube, kong)
+- 💀 [Run simple Python gRPC service behind kong-proxy](./minikube_kong_grpc_py/README.md) (minikube, kong)
+- 💀 [Run simple Go gRPC service behind kong-proxy](./minikube_kong_grpc_go/README.md) (minikube, kong, kong)
+- [Prepare knative and kong](./minikube_knative_kong_prepare/README.md) (minikube, knative)
+- [Run predefined helloworld with autoscale via knative](./minikube_knative_helloworld/README.md) (minikube, knative, kong)
+- [Helloworld application in python using knative](./minikube_knative_helloworld_py/README.md) (minikube, knative, kong)
+- [Run simple service from local image via knative](./minikube_knative_simple/README.md) (minikube, knative, kong)
+- 💀 [Example of gRPC ping app on Go with knative](./minikube_knative_grpc_go/README.md) (minikube, knative, kong)
+- 💀 [Example of gRPC service on Python with knative](./minikube_knative_grpc_py/README.md) (minikube, knative, kong)
+- [Run simple service with nginx ingress controller](./minikube_nginx_ingress/README.md) (minikube, nginx)
+- [Run gRPC service with nginx ingress controller](./minikube_nginx_grpc/README.md) (minikube, nginx)
 
-## Sequence of samples (kind)
+### kind cluster
 
-- [Start demo cluster with kind](./kind_empty_cluster) (kind)
-- [Run simple echo service in kind cluster](./kind_echo/README.md) (kind)
-- [Run echo service and nginx ingress controller in kind cluster](./kind_echo_ingress_nginx/README.md) (kind, nginx)
-- 💀 [Run helloworld service from local image with nginx ingress controller](./kind_local_image/README.md) (kind, nginx)
-- 💀 [Start sample gRPC service with nginx ingress controller on kind cluster](./kind_nginx_grpc/README.md) (kind, nginx)
+- [Start demo cluster](./kind_empty_cluster) (kind)
+- [Run simple echo service as NodePort](./kind_echo/README.md) (kind)
+- [Run echo service and nginx ingress controller](./kind_echo_ingress_nginx/README.md) (kind, nginx)
+- 💀 [Run helloworld from local image with nginx ingress controller](./kind_local_image/README.md) (kind, nginx)
+- 💀 [Start sample gRPC service with nginx ingress controller](./kind_nginx_grpc/README.md) (kind, nginx)
 
 ## Tools
 

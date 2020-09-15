@@ -27,7 +27,7 @@ Generate TLS certificate, and make a secret, and deploy a service:
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=api.bar/O=api.bar"
 ```
 
-If it show's an error like:
+If it shows an error like:
 
 ```
 Can't load /home/nikolay/.rnd into RNG
