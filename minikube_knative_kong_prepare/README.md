@@ -44,7 +44,10 @@ kong-proxy service shows external ip as "pending" because LoadBalancer service t
 Use kong as [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) controller for the cluster:
 
 ```bash
-kubectl patch configmap/config-network --namespace knative-serving --type merge --patch '{"data":{"ingress.class":"kong"}}'
+kubectl patch configmap/config-network \
+  --namespace knative-serving \
+  --type merge \
+  --patch '{"data":{"ingress.class":"kong"}}'
 ```
 
 See also [Kong official guides on Ingress Controller](https://github.com/Kong/kubernetes-ingress-controller/tree/main/docs/guides) and [Using Kong with Knative](https://github.com/Kong/kubernetes-ingress-controller/blob/main/docs/guides/using-kong-with-knative.md) in particular.

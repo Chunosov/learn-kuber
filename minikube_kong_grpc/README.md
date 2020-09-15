@@ -45,7 +45,7 @@ Rules:
   Host        Path  Backends
   ----        ----  --------
   *
-              /        grpcbin:9001 (172.17.0.5:9001)
+              /        grpcbin:9000 (172.17.0.5:9000)
 Annotations:  Events:  <none>
 ```
 
@@ -55,12 +55,14 @@ Now the service can be accessed outside of the cluster (though it doesn't work a
 
 ```bash
 curl $PROXY_IP
-Client sent an HTTP request to an HTTPS server.
+Warning: Binary output can mess up your terminal. Use "--output -" to tell
+Warning: curl to output it to your terminal anyway, or consider "--output
+Warning: <FILE>" to save to a file.
 
-# the same inside of cluster
+# try the same inside of cluster
 minikube ssh
-curl 172.17.0.5:9001
-Client sent an HTTP request to an HTTPS server.
+curl 172.17.0.5:9000
+curl: (1) Received HTTP/0.9 when not allowed # due to different versions of curl?
 ```
 
 ### Use grpcurl

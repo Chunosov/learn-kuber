@@ -21,6 +21,10 @@
 ## Sequence of samples (kind)
 
 - [Start demo cluster with kind](./kind_empty_cluster) (kind)
+- [Run simple echo service in kind cluster](./kind_echo/README.md) (kind)
+- [Run echo service and nginx ingress controller in kind cluster](./kind_echo_ingress_nginx/README.md) (kind, nginx)
+- [Run helloworld Python service with nginx ingress controller](./kind_helloworld_py/README/md) (kind, nginx)
+- [Start sample gRPC service with nginx ingress controller on kind cluster](./kind_nginx_grpc/README.md) (kind, nginx)
 
 ## Tools
 

@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: helloworld-py
+  labels:
+    app: helloworld-py
+spec:
+  containers:
+  - name: helloworld-py
+    image: localhost:5000/helloworld_py:v0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld-py
+spec:
+  selector:
+    app: helloworld-py
+  ports:
+  - port: 8080 # Default port used by the image
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: helloworld-py
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /hello-py
+        backend:
+          serviceName: helloworld-py
+          servicePort: 8080
+  - host: api.bar
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: helloworld-py
+          servicePort: 8080
