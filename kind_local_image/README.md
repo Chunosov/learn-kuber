@@ -15,6 +15,14 @@ kubectl wait --namespace ingress-nginx \
   --timeout=120s
 ```
 
+Check if the registry is available:
+
+```bash
+curl http://localhost:5000/v2/_catalog
+{"repositories":[]}
+```
+
+
 Build custom helloworld docker image from one the previous examples and push it to the local registry:
 
 ```bash

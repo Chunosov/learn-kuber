@@ -29,7 +29,7 @@ nodes:
         node-labels: "ingress-ready=true"
   extraPortMappings:
   - containerPort: 80
-    hostPort: 8080
+    hostPort: 80
     protocol: TCP
 EOF
 

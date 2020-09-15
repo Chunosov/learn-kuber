@@ -1,3 +1,14 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: grpcbin
+  labels:
+    app: grpcbin
+spec:
+  containers:
+    - name: grpcbin
+      image: moul/grpcbin # https://hub.docker.com/r/moul/grpcbin
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,54 +17,10 @@ metadata:
     app: grpcbin
 spec:
   type: NodePort
-  ports:
-  - name: grpc
-    port: 9001
   selector:
     app: grpcbin
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: grpcbin
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: grpcbin
-  template:
-    metadata:
-      labels:
-        app: grpcbin
-    spec:
-      containers:
-      - image: moul/grpcbin # https://hub.docker.com/r/moul/grpcbin
-        name: grpcbin
-        ports:
-        #- containerPort: 9000 # insecure port
-        - containerPort: 9001 # secure port
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: grpcbin
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    # If TLS is enabled for the ingress,
-    # controller redirects HTTP clients to the HTTPS port 443
-    # using a 308 Permanent Redirect response. It's true by default.
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-spec:
-  rules:
-  - host: api.bar
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: grpcbin
-          servicePort: 9001
-  tls:
-    - secretName: tls-secret
-      hosts:
-        - api.bar
+  ports:
+    - name: insecure
+      port: 9000
+    - name: secure
+      port: 9001

@@ -30,7 +30,7 @@
 - [Run simple echo service as NodePort](./kind_echo/README.md) (kind)
 - [Run echo service and nginx ingress controller](./kind_echo_ingress_nginx/README.md) (kind, nginx)
 - 💀 [Run helloworld from local image with nginx ingress controller](./kind_local_image/README.md) (kind, nginx)
-- 💀 [Start sample gRPC service with nginx ingress controller](./kind_nginx_grpc/README.md) (kind, nginx)
+- [Start sample gRPC service with nginx ingress controller](./kind_nginx_grpc/README.md) (kind, nginx)
 
 ## Tools
 

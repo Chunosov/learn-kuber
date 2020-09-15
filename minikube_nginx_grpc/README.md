@@ -238,6 +238,9 @@ Then generate a certificate and make a secret, it should be done before making n
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=myexample.com/O=myexample.com"
 ```
 
+<details>
+  <summary>Error "Cannot open file .rnd"</summary>
+
 If it shows an error like:
 
 ```
@@ -246,6 +249,11 @@ Can't load /home/nikolay/.rnd into RNG
 ```
 
 then edit the config `/etc/ssl/openssl.cnf` and comment line `RANDFILE		= $ENV::HOME/.rnd` ([solution from here](https://github.com/openssl/openssl/issues/7754)).
+
+---
+</details>
+
+&nbsp;
 
 Add the certificate as a secret to the cluster:
 
