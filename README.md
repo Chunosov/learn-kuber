@@ -14,7 +14,7 @@
 - [Run example echo server behind kong-proxy](./minikube_kong_echo/README.md) (minikube, kong)
 - 💀 [Run example gRPC service behind kong-proxy](./minikube_kong_grpc/README.md) (minikube, kong)
 - 💀 [Run simple Python gRPC service behind kong-proxy](./minikube_kong_grpc_py/README.md) (minikube, kong)
-- 💀 [Run simple Go gRPC service behind kong-proxy](./minikube_kong_grpc_go/README.md) (minikube, kong, kong)
+- 💀 [Run simple Go gRPC service behind kong-proxy](./minikube_kong_grpc_go/README.md) (minikube, kong)
 - [Prepare knative and kong](./minikube_knative_kong_prepare/README.md) (minikube, knative)
 - [Run predefined helloworld with autoscale via knative](./minikube_knative_helloworld/README.md) (minikube, knative, kong)
 - [Helloworld application in python using knative](./minikube_knative_helloworld_py/README.md) (minikube, knative, kong)
@@ -31,6 +31,7 @@
 - [Run echo service and nginx ingress controller](./kind_echo_ingress_nginx/README.md) (kind, nginx)
 - 💀 [Run helloworld from local image with nginx ingress controller](./kind_local_image/README.md) (kind, nginx)
 - [Start sample gRPC service with nginx ingress controller](./kind_nginx_grpc/README.md) (kind, nginx)
+- [Use kong ingress controller](./kind_kong_ingress/README/md) (kind, kong)
 
 ## Tools
 
