@@ -10,9 +10,12 @@ Run minikube cluster and [install kong](https://github.com/Kong/kubernetes-ingre
 minikube start --driver=virtualbox
 kubectl create -f https://bit.ly/k4k8s
 
-export PROXY_IP=$(minikube service -n kong kong-proxy --url | head -1)
-echo $PROXY_IP
-http://192.168.99.108:30552
+kubectl get service kong-proxy -n kong
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
+kong-proxy   LoadBalancer   10.99.52.137   <pending>     80:30493/TCP,443:30363/TCP   21m
+
+export PORT_HTTP=30493
+export PORT_HTTPS=30363
 ```
 
 ## Deploy service
@@ -20,24 +23,97 @@ http://192.168.99.108:30552
 Deploy sample gRPC servce:
 
 ```bash
-kubectl apply -f service.yaml
-# or
-kubectl apply -f https://bit.ly/grpcbin-service
+kubectl apply -f service_0.yaml
 
 kubectl get service grpcbin
-NAME      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-grpcbin   ClusterIP   10.97.115.99   <none>        9001/TCP   12s
+NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE
+grpcbin   NodePort   10.108.224.113   <none>        9000:31936/TCP,9001:32009/TCP   19s
+
+export SERVICE_PORT_HTTP=31936
+export SERVICE_PORT_HTTPS=32009
 ```
 
-## Access service
-
-Make an ingress rule accessing grpcbin service outside of the cluster:
+## Try as NodePort
 
 ```bash
-kubectl apply -f ingress.yaml
+grpcurl -v -d '{"greeting": "TEST"}' -plaintext $(minikube ip):$SERVICE_PORT_HTTP hello.HelloService.SayHello
 
-kubectl describe ingress demo-grpc
-Name:             demo-grpc
+Resolved method descriptor:
+rpc SayHello ( .hello.HelloRequest ) returns ( .hello.HelloResponse );
+
+Request metadata to send:
+(empty)
+
+Response headers received:
+content-type: application/grpc
+
+Response contents:
+{
+  "reply": "hello TEST"
+}
+
+Response trailers received:
+(empty)
+Sent 1 request and received 1 response
+```
+
+```bash
+grpcurl -v -d '{"greeting": "TEST"}' -insecure $(minikube ip):$SERVICE_PORT_HTTPS hello.HelloService.SayHello
+
+Resolved method descriptor:
+rpc SayHello ( .hello.HelloRequest ) returns ( .hello.HelloResponse );
+
+Request metadata to send:
+(empty)
+
+Response headers received:
+content-type: application/grpc
+trailer: Grpc-Status
+trailer: Grpc-Message
+trailer: Grpc-Status-Details-Bin
+
+Response contents:
+{
+  "reply": "hello TEST"
+}
+
+Response trailers received:
+(empty)
+Sent 1 request and received 1 response
+```
+
+It works on both ports HTTP and HTTPS.
+
+### Try invalid case
+
+```bash
+grpcurl -v -d '{"greeting": "TEST"}' -plaintext $(minikube ip):$SERVICE_PORT_HTTPS hello.HelloService.SayHello
+Failed to dial target host "192.168.99.113:32009": context deadline exceeded
+
+grpcurl -v -d '{"greeting": "TEST"}' -insecure $(minikube ip):$SERVICE_PORT_HTTP hello.HelloService.SayHello
+Failed to dial target host "192.168.99.113:31936": tls: first record does not look like a TLS handshake
+```
+
+The "context deadline exceeded" error happens when we are trying to access HTTPS port with `-plaintext`. When we are trying to access HTTP port with `-insecure`, expected TLS records are not found.
+
+## Try with ingress
+
+Make an ingress rule accessing grpcbin service outside of the cluster. By default, kong assumes all routes and services are HTTP or HTTPs. We must mark them as gRPC via an annotation:
+
+```yaml
+konghq.com/protocols: grpc
+```
+
+Make sure you have grpcurl [installed](../README.md#grpcurl).
+
+### Very basic ingress rule
+
+```bash
+kubectl apply -f ingress_1.yaml
+
+kubectl describe ingress grpcbin
+Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+Name:             grpcbin
 Namespace:        default
 Address:
 Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
@@ -45,47 +121,80 @@ Rules:
   Host        Path  Backends
   ----        ----  --------
   *
-              /        grpcbin:9000 (172.17.0.5:9000)
-Annotations:  Events:  <none>
+              /   grpcbin:insecure   172.17.0.4:9000)
+Annotations:  konghq.com/protocols: grpc
+Events:       <none>
 ```
 
-### Use curl
-
-Now the service can be accessed outside of the cluster (though it doesn't work as expected):
+Try to connect:
 
 ```bash
-curl $PROXY_IP
-Warning: Binary output can mess up your terminal. Use "--output -" to tell
-Warning: curl to output it to your terminal anyway, or consider "--output
-Warning: <FILE>" to save to a file.
+curl http://$(minikube ip):$PORT_HTTP
+{"message":"no Route matched with those values"}
 
-# try the same inside of cluster
-minikube ssh
-curl 172.17.0.5:9000
-curl: (1) Received HTTP/0.9 when not allowed # due to different versions of curl?
+curl -k https://$(minikube ip):$PORT_HTTPS
+{"message":"no Route matched with those values"}
+
+grpcurl -v -d '{"greeting": "TEST"}' -plaintext $(minikube ip):$PORT_HTTP hello.HelloService.SayHello
+Failed to dial target host "192.168.99.113:30493": context deadline exceeded
+
+grpcurl -v -d '{"greeting": "TEST"}' -insecure $(minikube ip):$PORT_HTTPS hello.HelloService.SayHello
+Error invoking method "hello.HelloService.SayHello": failed to query for service descriptor "hello.HelloService": server does not support the reflection API
+
+grpcurl -proto hello.proto -v -d '{"greeting": "TEST"}' -insecure $(minikube ip):$PORT_HTTPS hello.HelloService.SayHello
+
+Resolved method descriptor:
+rpc SayHello ( .hello.HelloRequest ) returns ( .hello.HelloResponse );
+
+Request metadata to send:
+(empty)
+
+Response headers received:
+(empty)
+
+Response trailers received:
+(empty)
+Sent 1 request and received 0 responses
+ERROR:
+  Code: Unimplemented
+  Message: Not Found: HTTP status code 404; transport: missing content-type field
 ```
 
-### Use grpcurl
-
-Make sure you have grpcurl [installed](../README.md#grpcurl).
+### Ingress via host
 
 ```bash
-grpcurl -v -d '{"greeting": "TEST"}' -plaintext $(minikube ip):30552 hello.HelloService.SayHello
-Failed to dial target host "192.168.99.108:30552": context deadline exceeded
+kubectl delete ingress --all
+kubectl apply -f ingress_2.yaml
+
+grpcurl -v -d '{"greeting": "TEST"}' -authority myexample.com -plaintext $(minikube ip):30493 hello.HelloService.SayHello
+Failed to dial target host "192.168.99.113:30493": context deadline exceeded
+
+grpcurl -v -d '{"greeting": "TEST"}' -authority myexample.com -insecure $(minikube ip):30363 hello.HelloService.SayHello
+Error invoking method "hello.HelloService.SayHello": failed to query for service descriptor "hello.HelloService": server does not support the reflection API
+
+grpcurl -proto hello.proto -v -d '{"greeting": "TEST"}' -authority myexample.com -insecure $(minikube ip):30363 hello.HelloService.SayHello
+
+Resolved method descriptor:
+rpc SayHello ( .hello.HelloRequest ) returns ( .hello.HelloResponse );
+
+Request metadata to send:
+(empty)
+
+Response headers received:
+(empty)
+
+Response trailers received:
+(empty)
+Sent 1 request and received 0 responses
+ERROR:
+  Code: Unimplemented
+  Message: Not Found: HTTP status code 404; transport: missing content-type field
 ```
 
-By default, kong assumes all routes and services are HTTP or HTTPs. We must mark them as gRPC:
+<span style="color:red"><b>It doesn't work.</b> Posted a [question](https://discuss.konghq.com/t/does-grpc-proxy-works-under-minikube/7092) in the official discussion channel.</span>
 
-```bash
-kubectl patch ingress demo-grpc -p '{"metadata":{"annotations":{"konghq.com/protocols":"grpc"}}}'
-kubectl patch service grpcbin -p '{"metadata":{"annotations":{"konghq.com/protocols":"grpc"}}}'
-```
-
-<span style="color:red"><b>It doesn't work.</b> It says "context deadline exceeded". Posted a [question](https://discuss.konghq.com/t/does-grpc-proxy-works-under-minikube/7092) in the official discussion channel.</span>
-
----
-
-Direct steps to reproduce (for the question):
+<details>
+  <summary>Direct steps to reproduce (for the question)</summary>
 
 ```bash
 minikube start --driver=kvm2
@@ -115,3 +224,5 @@ kubectl patch ingress demo -p '{"metadata":{"annotations":{"konghq.com/protocols
 kubectl patch svc grpcbin -p '{"metadata":{"annotations":{"konghq.com/protocols":"grpc"}}}'
 grpcurl -v -d '{"greeting": "Kong Hello world!"}' -insecure $PROXY_IP:$PROXY_PORT hello.HelloService.SayHello
 ```
+</details>
+

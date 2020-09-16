@@ -2,13 +2,16 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpcbin
+  annotations:
+    konghq.com/protocols: grpc
   labels:
     app: grpcbin
 spec:
   ports:
-  - name: grpc
+  - name: insecure
     port: 9000
-    targetPort: 9000
+  - name: secure
+    port: 9001
   selector:
     app: grpcbin
 ---
@@ -30,5 +33,4 @@ spec:
       - image: moul/grpcbin # https://hub.docker.com/r/moul/grpcbin
         name: grpcbin
         ports:
-        - containerPort: 9000 # insecure port
-        #- containerPort: 9001 # secure port
+        - containerPort: 9000
