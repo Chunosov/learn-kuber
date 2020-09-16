@@ -1,4 +1,4 @@
-# Use kong ingress controller in kind cluster
+# Run simple service with kong ingress controller in kind cluster
 
 Start a cluster:
 

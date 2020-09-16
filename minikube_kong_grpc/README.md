@@ -191,7 +191,7 @@ ERROR:
   Message: Not Found: HTTP status code 404; transport: missing content-type field
 ```
 
-<span style="color:red"><b>It doesn't work.</b> Posted a [question](https://discuss.konghq.com/t/does-grpc-proxy-works-under-minikube/7092) in the official discussion channel.</span>
+<span style="color:red"><b>It doesn't work.</b> Posted a [question](https://discuss.konghq.com/t/does-grpc-proxy-works-under-minikube/7092) in the official discussion channel. It doesn't work differently than on [kind cluster](../kind_kong_grpc/README.md).</span>
 
 <details>
   <summary>Direct steps to reproduce (for the question)</summary>

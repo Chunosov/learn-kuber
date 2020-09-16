@@ -31,7 +31,8 @@
 - [Run echo service and nginx ingress controller](./kind_echo_ingress_nginx/README.md) (kind, nginx)
 - 💀 [Run helloworld from local image with nginx ingress controller](./kind_local_image/README.md) (kind, nginx)
 - [Start sample gRPC service with nginx ingress controller](./kind_nginx_grpc/README.md) (kind, nginx)
-- [Use kong ingress controller](./kind_kong_ingress/README/md) (kind, kong)
+- [Run simple service with kong ingress controller](./kind_kong_ingress/README/md) (kind, kong)
+- 💀 [Run gRPC service with kong ingress controller](./kind_kong_grpc/README.md) (kind, kong)
 
 ## Tools
 
