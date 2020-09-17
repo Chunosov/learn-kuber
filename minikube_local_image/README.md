@@ -6,7 +6,7 @@ Start demo cluster:
 minikube start --driver=kvm2
 ```
 
-Connect to docker inside of minilube VM:
+Connect to docker [inside](https://stackoverflow.com/questions/52310599/what-does-minikube-docker-env-mean) of minilube VM:
 
 ```bash
 eval $(minikube -p minikube docker-env)

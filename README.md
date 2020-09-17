@@ -23,6 +23,7 @@
 - 💀 [Example of gRPC service on Python with knative](./minikube_knative_grpc_py/README.md) (minikube, knative, kong)
 - [Run simple service with nginx ingress controller](./minikube_nginx_ingress/README.md) (minikube, nginx)
 - [Run gRPC service with nginx ingress controller](./minikube_nginx_grpc/README.md) (minikube, nginx)
+- [Get statrted with Istio](../minikube_istio_getstart/README.md) (minikube, istio)
 
 ### kind cluster
 
@@ -90,4 +91,31 @@ rm grpcurl_1.7.0_linux_x86_64.tar.gz
 
 grpcurl -version
 grpcurl v1.7.0
+```
+
+### istio
+
+Installation steps for Istio are described [here](https://istio.io/latest/docs/setup/getting-started/#download):
+
+```bash
+curl -L https://istio.io/downloadIstio | sh -
+sudo mv istio-1.7.1/bin/istioctl /usr/local/bin
+
+istioctl version
+no running Istio pods in "istio-system"
+1.7.1
+```
+
+## kubernetes spells
+
+Get pod name by application name:
+
+```bash
+kubectl get pod -l app=$APP -o jsonpath='{.items[0].metadata.name}'
+```
+
+Get service node port:
+
+```bash
+kubectl get service $SERVICE --output='jsonpath="{.spec.ports[0].nodePort}"'
 ```
