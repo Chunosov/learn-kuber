@@ -1,5 +1,7 @@
 # Get statrted with Istio on minikube cluster
 
+This is a reproduction of the official [get-started example](https://istio.io/latest/docs/setup/getting-started/) to make sure all is working with predefinied application.
+
 Start a cluster and [install istio](https://istio.io/latest/docs/setup/getting-started/#install):
 
 ```bash

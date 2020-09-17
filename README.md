@@ -24,6 +24,7 @@
 - [Run simple service with nginx ingress controller](./minikube_nginx_ingress/README.md) (minikube, nginx)
 - [Run gRPC service with nginx ingress controller](./minikube_nginx_grpc/README.md) (minikube, nginx)
 - [Get statrted with Istio](../minikube_istio_getstart/README.md) (minikube, istio)
+- [Run simple service with Istio](../minikube_istio_helloworld/README.md) (minikube, istio)
 
 ### kind cluster
 
