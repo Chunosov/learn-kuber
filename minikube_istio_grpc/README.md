@@ -112,9 +112,9 @@ NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)         
 istio-ingressgateway   NodePort   10.102.252.82   <none>        15021:31560/TCP,80:32061/TCP,443:31189/TCP,31400:31864/TCP,15443:31850/TCP,50051:30000/TCP   80m
 ```
 
-**Note:** I'm not sure how it can help because we already have port definition for TCP protocol, why not to use that port instead of intriducing another one only differently named .
+**Note:** I'm not sure how it can help because we already have port definition for TCP protocol, why not to use that port instead of introducing another one but differently named.
 
-Make a gateway and check connection. On minikube LoadBalancer services can be accessed in the same way as NodePort:
+Make a gateway and check connection. On minikube, LoadBalancer services can be accessed in the same way as NodePort ones:
 
 ```bash
 kubectl apply -f gateway_1.yaml
@@ -165,11 +165,10 @@ Sent 1 request and received 0 responses
 ERROR:
   Code: Unimplemented
   Message:
-nikolay@leo:~/Projects/learn-kuber/minikube_istio_grpc$ grpcurl -proto hello.proto -v -d '{"greeting": "TEST"}' -insecure 10.102.252.82:50051 hello.HelloService.SayHello
+
+grpcurl -proto hello.proto -v -d '{"greeting": "TEST"}' -insecure 10.102.252.82:50051 hello.HelloService.SayHello
 Failed to dial target host "10.102.252.82:50051": tls: first record does not look like a TLS handshake
 ```
-
-Both give the similar error but in a bit different format.
 
 ### Use existed TCP port
 
