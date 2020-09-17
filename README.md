@@ -23,8 +23,9 @@
 - 💀 [Example of gRPC service on Python with knative](./minikube_knative_grpc_py/README.md) (minikube, knative, kong)
 - [Run simple service with nginx ingress controller](./minikube_nginx_ingress/README.md) (minikube, nginx)
 - [Run gRPC service with nginx ingress controller](./minikube_nginx_grpc/README.md) (minikube, nginx)
-- [Get statrted with Istio](../minikube_istio_getstart/README.md) (minikube, istio)
-- [Run simple service with Istio](../minikube_istio_helloworld/README.md) (minikube, istio)
+- [Get statrted with Istio](./minikube_istio_getstart/README.md) (minikube, istio)
+- [Run simple service with Istio](./minikube_istio_helloworld/README.md) (minikube, istio)
+- 💀 [Run simple gRPC service with Istio](./minikube_istio_grpc/README.md) (minikube, istio)
 
 ### kind cluster
 
