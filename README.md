@@ -26,6 +26,9 @@
 - [Get statrted with Istio](./minikube_istio_getstart/README.md) (minikube, istio)
 - [Run simple service with Istio](./minikube_istio_helloworld/README.md) (minikube, istio)
 - 💀 [Run simple gRPC service with Istio](./minikube_istio_grpc/README.md) (minikube, istio)
+- [Run get-started example with Ambassador ingress](./minikube_ambassador_getstart/README.md) (minikube, ambassador)
+- [Run simple echo service with Ambassador ingress](./minikube_ambassador_echo/README.md) (minikube, ambassador)
+- 💀 [Run gRPC service with Ambassador ingress](./minikube_ambassador_grpc/README.md) (minikube, ambassador)
 
 ### kind cluster
 

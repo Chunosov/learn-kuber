@@ -1,0 +1,15 @@
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: apple-mapping
+spec:
+  prefix: /apple/
+  service: apple-service:5678
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: banana-mapping
+spec:
+  prefix: /banana/
+  service: banana-service:5678
