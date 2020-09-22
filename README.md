@@ -26,6 +26,7 @@
 - [Get statrted with Istio](./minikube_istio_getstart/README.md) (minikube, istio)
 - [Run simple service with Istio](./minikube_istio_helloworld/README.md) (minikube, istio)
 - 💀 [Run simple gRPC service with Istio](./minikube_istio_grpc/README.md) (minikube, istio)
+- [Use Istio as ingress controller for knative](../minikube_istio_knative/README.md) (minikube, knative, istio)
 - [Run get-started example with Ambassador ingress](./minikube_ambassador_getstart/README.md) (minikube, ambassador)
 - [Run simple echo service with Ambassador ingress](./minikube_ambassador_echo/README.md) (minikube, ambassador)
 - 💀 [Run gRPC service with Ambassador ingress](./minikube_ambassador_grpc/README.md) (minikube, ambassador)
@@ -123,4 +124,10 @@ Get service node port:
 
 ```bash
 kubectl get service $SERVICE --output='jsonpath="{.spec.ports[0].nodePort}"'
+```
+
+Show logs for a pod (`-p` show log for the previos crashed instance, it's very useful when pod gets stuck in the CrashLoopBackOff state):
+
+```bash
+kubectl logs $PODNAME -p
 ```
