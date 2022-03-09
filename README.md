@@ -42,6 +42,10 @@
 - [Run simple service with kong ingress controller](./kind_kong_ingress/README/md) (kind, kong)
 - 💀 [Run gRPC service with kong ingress controller](./kind_kong_grpc/README.md) (kind, kong)
 
+### Various examples
+
+- [kustomize basic example](./kustomize_0/README.md)
+
 ## Tools
 
 ### kubectl

@@ -1,0 +1,13 @@
+# This will be substitute into `labels` field of each generated object manifest
+# And also will be used in `matchLabels` field for deployment manifest
+# And also will be used in `selector` field for service manifest
+commonLabels:
+  foo: demo-echo
+
+# This will be substitute into `annotations` field of each generated object manifest
+commonAnnotations:
+  version: 0.0.1
+
+resources:
+- deployment.yaml
+- service.yaml

@@ -1,0 +1,13 @@
+# will be added to all object names
+namePrefix: prod-
+
+# additional labels that will be added to all object manifests
+commonLabels:
+  env: prod
+
+bases:
+- ../base
+
+patchesStrategicMerge:
+- deployment.yaml
+- service.yaml

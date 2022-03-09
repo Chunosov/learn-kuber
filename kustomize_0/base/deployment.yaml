@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: echo
+  name: echo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+      - image: hashicorp/http-echo:0.2.3
+        name: echo
+        args:
+        - "-text=Hello world!"
+        resources: {}
