@@ -44,7 +44,8 @@
 
 ### Various examples
 
-- [kustomize basic example](./kustomize_0/README.md)
+- [Basic example for kustomize](./kustomize_0/README.md) (kustomize, shell)
+- [Show of pod lifecycle](./pod_lifecycle/README.md) (minikube, init-container)
 
 ## Tools
 

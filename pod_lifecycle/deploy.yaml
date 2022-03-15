@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loap
+  template:
+    metadata:
+      labels:
+        app: loap
+    spec:
+      # Use init containers to prepare the pod for normal operation.
+      # For example, to pull some external data, create database tables,
+      # or wait until a service it depends on is available.
+      # You can have multiple init containers if necessary
+      # and all need to complete successfully for the regular containers to start.
+      initContainers:
+      - name: init
+        image: busybox
+        command: ['sh', '-c', 'echo $(date +%s): INIT >> /loap/timing']
+        volumeMounts:
+        - mountPath: /loap
+          name: timing
+
+      containers:
+      - name: main
+        image: busybox
+        command:
+        - 'sh'
+        - '-c'
+        - 'echo $(date +%s): MAIN-START >> /loap/timing; sleep 10; echo $(date +%s): MAIN-END >> /loap/timing;'
+        volumeMounts:
+        - mountPath: /loap
+          name: timing
+
+        # Used by the kubelet to determine if and when to re-start a container
+        # and by a deployment to decide if a rolling update is successful
+        livenessProbe:
+          exec:
+            command: ['sh', '-c', 'echo $(date +%s): LIVENESS >> /loap/timing']
+
+        # Used by a service to determine if a pod should receive traffic
+        readinessProbe:
+          exec:
+            command: ['sh', '-c', 'echo $(date +%s): READINESS >> /loap/timing']
+
+        # If you don't provide the probes,
+        # the kubelet assumes for both types that they are successful and two things happen:
+        #
+        # - The re-start policy can't be applied
+        #   https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
+        #
+        # - containers in the pod immediately receive traffic from a service that fronts it,
+        #   even if they're still busy starting up.
+
+        # Use hooks to initialize a container and to tear it down properly
+        lifecycle:
+          postStart:
+            exec:
+              command: ['sh', '-c', 'echo $(date +%s): STARTED >> /loap/timing']
+
+          preStop:
+            exec:
+              # Don't use the word "STOP" here, it's not printed in the log (don't know why)
+              command: ['sh', '-c', 'echo $(date +%s): TERMINATING >> /loap/timing']
+      volumes:
+      - name: timing
+        hostPath:
+          path: /tmp/loap

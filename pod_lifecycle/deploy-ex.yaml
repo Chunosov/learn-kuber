@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loap-ex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loap-ex
+  template:
+    metadata:
+      labels:
+        app: loap-ex
+    spec:
+      initContainers:
+      - name: init
+        image: busybox
+        command:
+        - 'sh'
+        - '-c'
+        - 'echo $(date +%s): INIT-START >> /loap/timing-ex; sleep 100; echo $(date +%s): INIT-END >> /loap/timing-ex;'
+        volumeMounts:
+        - mountPath: /loap
+          name: timing
+      containers:
+      - name: main
+        image: busybox
+        command:
+        - 'sh'
+        - '-c'
+        - 'echo $(date +%s): MAIN-START >> /loap/timing-ex; sleep 10; echo $(date +%s): MAIN-END >> /loap/timing-ex;'
+        volumeMounts:
+        - mountPath: /loap
+          name: timing
+        livenessProbe:
+          exec:
+            command: ['sh', '-c', 'echo $(date +%s): LIVENESS >> /loap/timing-ex']
+        readinessProbe:
+          exec:
+            command: ['sh', '-c', 'echo $(date +%s): READINESS >> /loap/timing-ex']
+        lifecycle:
+          postStart:
+            exec:
+              command: ['sh', '-c', 'echo $(date +%s): STARTED >> /loap/timing-ex']
+          preStop:
+            exec:
+              command: ['sh', '-c', 'echo $(date +%s): TERMINATING >> /loap/timing-ex']
+      volumes:
+      - name: timing
+        hostPath:
+          path: /tmp/loap
