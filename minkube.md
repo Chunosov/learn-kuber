@@ -140,5 +140,5 @@ kubectl config get-contexts
 CURRENT   NAME        CLUSTER     AUTHINFO    NAMESPACE
           kind-kind   kind-kind   kind-kind 
 
-kubectl config use-contexts kind-kind
+kubectl config use-context kind-kind
 ```
