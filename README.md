@@ -47,6 +47,7 @@
 - [Basic example for kustomize](./kustomize_0/README.md) (kustomize, shell)
 - [Show pod lifecycle](./pod_lifecycle/README.md) (minikube, init-container)
 - [Wait for service](./wait_for_service/README.md) (minikube, init-container)
+- [Sample controller](./controller-1/README.md) (kind, controller)
 
 ## Tools
 
