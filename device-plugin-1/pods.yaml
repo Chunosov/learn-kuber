@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dp1-1
+spec:
+  containers:
+    - name: worker
+      image: busybox
+      command:
+        - 'sh'
+        - '-c'
+        - 'echo Device vars:; set | grep ^DEV_; sleep 1h'
+      resources:
+        limits:
+          myplugin.io/mydevice-1: 1
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dp1-2
+spec:
+  containers:
+    - name: worker
+      image: busybox
+      command:
+        - 'sh'
+        - '-c'
+        - 'echo Device vars:; set | grep ^DEV_; sleep 1h'
+      resources:
+        limits:
+          myplugin.io/mydevice-2: 1
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dp1-3
+spec:
+  containers:
+    - name: worker
+      image: busybox
+      command:
+        - 'sh'
+        - '-c'
+        - 'echo Device vars:; set | grep ^DEV_; sleep 1h'
+      resources:
+        limits:
+          myplugin.io/mydevice-2: 1
+          myplugin.io/mydevice-3: 2
