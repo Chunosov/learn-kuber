@@ -34,13 +34,21 @@
 
 ### kind cluster
 
-- [Start demo cluster](./kind_empty_cluster) (kind)
+- [Start demo cluster](./kind_empty_cluster/README.md) (kind)
 - [Run simple echo service as NodePort](./kind_echo/README.md) (kind)
 - [Run echo service and nginx ingress controller](./kind_echo_ingress_nginx/README.md) (kind, nginx)
 - 💀 [Run helloworld from local image with nginx ingress controller](./kind_local_image/README.md) (kind, nginx)
 - [Start sample gRPC service with nginx ingress controller](./kind_nginx_grpc/README.md) (kind, nginx)
 - [Run simple service with kong ingress controller](./kind_kong_ingress/README/md) (kind, kong)
 - 💀 [Run gRPC service with kong ingress controller](./kind_kong_grpc/README.md) (kind, kong)
+- [Try kind load balancer](./kind_lb/README.md) (kind)
+
+### WSL cluster
+
+- [Start demo cluster with k3s](./wsl_start_k3s/README.md) (wsl2, k3s)
+- [Start demo cluster with kind](./wsl_start_kind/README.md) (wsl2, k3s)
+- [Run helloworld service in WSL k3s cluster](./wsl_echo_k3s/README.md) (wsl2, k3s)
+- [Run helloworld service in WSL kind cluster](./wsl_echo_kind/README.md) (wsl2, kind)
 
 ### Various examples
 
@@ -86,13 +94,16 @@ commit: 0c5e9de4ca6f9c55147ae7f90af97eff5befef5f-dirty
 
 Install [kind](https://kind.sigs.k8s.io/) binary for trying kind examples.
 
+
 ```bash
-curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
+#curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.24.0/kind-linux-amd64
 chmod +x kind
 sudo mv kind /usr/local/bin
 
 kind version
-kind v0.8.1 go1.14.2 linux/amd64
+#kind v0.8.1 go1.14.2 linux/amd64
+kind version 0.24.0
 ```
 
 ### grpcurl
@@ -123,6 +134,16 @@ no running Istio pods in "istio-system"
 1.7.1
 ```
 
+### helm
+
+Installation steps for helm are described [here](https://helm.sh/docs/intro/install/):
+
+```bash
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+```
+
 ## kubernetes spells
 
 Get pod name by application name:
@@ -137,8 +158,22 @@ Get service node port:
 kubectl get service $SERVICE --output='jsonpath="{.spec.ports[0].nodePort}"'
 ```
 
+Get pod container port:
+
+```bash
+kubectl get pod $POD  --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}'
+```
+
 Show logs for a pod (`-p` show log for the previos crashed instance, it's very useful when pod gets stuck in the CrashLoopBackOff state):
 
 ```bash
 kubectl logs $PODNAME -p
+```
+
+Port forwarding:
+
+```bash
+kubectl port-forward $POD $LOCAL_PORT:$POD_PORT
+kubectl port-forward pods/$POD $LOCAL_PORT:$POD_PORT
+kubectl port-forward service/$SERVICE $LOCAL_PORT:$SERVICE_PORT
 ```
