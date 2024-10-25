@@ -41,14 +41,15 @@
 - [Start sample gRPC service with nginx ingress controller](./kind_nginx_grpc/README.md) (kind, nginx)
 - [Run simple service with kong ingress controller](./kind_kong_ingress/README/md) (kind, kong)
 - 💀 [Run gRPC service with kong ingress controller](./kind_kong_grpc/README.md) (kind, kong)
+- [Start demo cluster on WSL](./kind_start_wsl/README.md) (kind, wsl)
+- [Run helloworld service in kind cluster on WSL](./kind_echo_wsl/README.md) (kind, wsl)
 - [Try kind load balancer](./kind_lb/README.md) (kind)
+- [UDP tunneling](./kind_udp/README.md) (kind, UDP)
 
-### WSL cluster
+### k3s cluster
 
-- [Start demo cluster with k3s](./wsl_start_k3s/README.md) (wsl2, k3s)
-- [Start demo cluster with kind](./wsl_start_kind/README.md) (wsl2, k3s)
-- [Run helloworld service in WSL k3s cluster](./wsl_echo_k3s/README.md) (wsl2, k3s)
-- [Run helloworld service in WSL kind cluster](./wsl_echo_kind/README.md) (wsl2, kind)
+- [Start demo cluster on WSL](./k3s_start_wsl/README.md) (k3s, wsl)
+- [Run helloworld service on WSL cluster](./k3s_echo_wsl/README.md) (wsl2, k3s)
 
 ### Various examples
 

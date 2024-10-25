@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: echo
+  name: echo
+spec:
+  selector:
+    app: echo
+  type: NodePort
+  ports:
+  - port: 8080
+    protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: echo
+  name: echo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+      - image: k8s.gcr.io/echoserver:1.10
+        name: echo
+        ports:
+        - containerPort: 8080

@@ -30,6 +30,8 @@ I1022 08:03:53.156518   11246 controller.go:84] Creating new cloud provider for 
 I1022 08:03:53.174664   11246 controller.go:91] Starting cloud controller for cluster demo
 ```
 
+**NB:** `cloud-provider-kind` works even on WSL instance, but there it must be run under `sudo`. On regular VM it works without sudo.
+
 Deploy a LoadBalancer service with two backend pods:
 
 ```bash
