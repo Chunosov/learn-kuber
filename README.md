@@ -147,31 +147,43 @@ chmod 700 get_helm.sh
 
 ## kubernetes spells
 
-Get pod name by application name:
+■ Create a single pod from image:
+
+```bash
+kubectl run $POD --image=praqma/network-multitool
+```
+
+■ Get a shell to the running container:
+
+```bash
+kubectl exec --stdin --tty $POD -- /bin/bash
+```
+
+■ Get pod name by application name:
 
 ```bash
 kubectl get pod -l app=$APP -o jsonpath='{.items[0].metadata.name}'
 ```
 
-Get service node port:
+■ Get service node port:
 
 ```bash
 kubectl get service $SERVICE --output='jsonpath="{.spec.ports[0].nodePort}"'
 ```
 
-Get pod container port:
+■ Get pod container port:
 
 ```bash
 kubectl get pod $POD  --template='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}'
 ```
 
-Show logs for a pod (`-p` show log for the previos crashed instance, it's very useful when pod gets stuck in the CrashLoopBackOff state):
+■ Show logs for a pod (`-p` show log for the previous crashed instance, it's very useful when pod gets stuck in the CrashLoopBackOff state):
 
 ```bash
-kubectl logs $PODNAME -p
+kubectl logs $POD -p
 ```
 
-Port forwarding:
+■ Port forwarding:
 
 ```bash
 kubectl port-forward $POD $LOCAL_PORT:$POD_PORT
